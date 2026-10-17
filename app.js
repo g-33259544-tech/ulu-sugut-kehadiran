@@ -4,9 +4,9 @@ function renderMonitor(){
  const date=$('#monitorDate').value||$('#date').value;
  const data=classes.map((c,i)=>{const list=pupils.filter(p=>p.class===c);const marked=list.filter(p=>db[`${date}|${p.id}`]?.status&&db[`${date}|${p.id}`].status!=='Belum ditanda').length;return {c,teacher:`Guru Kelas Contoh ${i+1}`,total:list.length,marked};});
  const complete=data.filter(x=>x.marked===x.total).length;
- $('#monitorStats').innerHTML=`<span>Lengkap: <b>${complete}</b></span><span>Belum lengkap: <b>${data.length-complete}</b></span><span>Tarikh: ${esc(date)}</span>`;
+ $('#monitorStats').innerHTML=`<span class="completion-green">Lengkap: <b>${complete}</b></span><span class="completion-red">Belum lengkap: <b>${data.length-complete}</b></span><span>Tarikh: ${esc(date)}</span>`;
  const shown=data.filter(x=>!$('#incompleteOnly').checked||x.marked<x.total);
- $('#monitorRows').innerHTML=shown.map(x=>`<tr><td>${esc(x.c)}</td><td>${esc(x.teacher)}</td><td>${x.marked} / ${x.total}</td><td>${x.total-x.marked}</td><td class="monitor-status">${x.marked===x.total?'Lengkap':x.marked===0?'Belum mula':'Sebahagian'}</td></tr>`).join('')||'<tr><td colspan="5">Semua kelas contoh telah lengkap bagi tarikh ini.</td></tr>';
+ $('#monitorRows').innerHTML=shown.map(x=>`<tr><td>${esc(x.c)}</td><td>${esc(x.teacher)}</td><td>${x.marked} / ${x.total}</td><td>${x.total-x.marked}</td><td class="monitor-status"><span class="${x.marked===x.total?'completion-green':'completion-red'}">${x.marked===x.total?'Lengkap':x.marked===0?'Belum mula':'Sebahagian'}</span></td></tr>`).join('')||'<tr><td colspan="5">Semua kelas contoh telah lengkap bagi tarikh ini.</td></tr>';
 }
 $('#monitorDate').value=$('#date').value;
 $('#monitorDate').addEventListener('change',renderMonitor);
